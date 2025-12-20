@@ -1,0 +1,392 @@
+@import url("../styles.css");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    min-height: 100vh;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+#game-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, var(--color-bg-secondary) 0%, #e9ecef 100%);
+    border-bottom: 3px solid var(--color-primary);
+    box-shadow: var(--shadow-md);
+}
+
+.game-info {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+}
+
+.value {
+    font-size: var(--font-size-lg);
+    font-weight: bold;
+    color: var(--color-primary);
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+}
+
+.game-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.btn-primary {
+    padding: 0.8rem 2rem;
+    font-size: var(--font-size-md);
+    min-width: 140px;
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-weight: 700;
+}
+
+.btn-secondary {
+    padding: 0.8rem 1.5rem;
+    font-size: var(--font-size-md);
+    min-width: 120px;
+    background: #e9ecef;
+    color: #495057;
+    border: 1px solid #ced4da;
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-weight: 700;
+}
+
+.btn-secondary:hover {
+    background: #dee2e6;
+    transform: translateY(-1px) scale(1.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px) scale(1.05);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.game-area {
+    flex: 1;
+    display: flex;
+    padding: 1.5rem;
+    gap: 2rem;
+    background: linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(233, 236, 239, 0.9) 100%);
+}
+
+.play-area {
+    flex: 1;
+    background: white;
+    border-radius: var(--border-radius-lg);
+    border: 3px solid var(--color-primary);
+    box-shadow: var(--shadow-lg);
+    min-height: 500px;
+    padding: 1rem;
+}
+
+.flying-dolls {
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.assembly-area {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: var(--border-radius-lg);
+    border: 3px solid var(--color-primary);
+    box-shadow: var(--shadow-lg);
+    padding: 1.5rem;
+}
+
+.mother-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    position: relative;
+}
+
+.doll.assembled {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    transition: transform 0.3s ease, z-index 0.3s ease;
+    pointer-events: auto;
+}
+
+.doll.placed-assembled {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: auto;
+    animation: place-doll 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes place-doll {
+    0% {
+        transform: translate(-50%, -50%) scale(0.9);
+        opacity: 0.7;
+    }
+
+    70% {
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+.doll[data-is-mother="true"] {
+    width: 70% !important;
+    max-width: 240px;
+    min-width: 150px;
+    height: auto;
+    transition: width 0.3s ease;
+}
+
+.mother-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: visible;
+}
+
+.doll.assembled:not([data-is-mother="true"]) {
+    width: calc(100% - 20px) !important;
+    transition: width 0.3s ease;
+}
+
+.flying-dolls {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--border-radius-md);
+}
+
+.play-area .doll {
+    position: absolute;
+    transition: transform 0.2s ease-out;
+}
+
+.doll.open-completely .doll-top {
+    transform: translateY(-500px) !important;
+    opacity: 0;
+
+}
+
+.doll[data-is-mother="true"].open-completely .doll-top {
+    transform: translateY(-400px) !important;
+}
+
+.doll.open-completely .doll-top {
+    transition: none !important;
+}
+
+.doll.open-completely .doll-bottom {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+}
+
+.doll[data-is-mother="true"] {
+    width: 200px !important;
+    height: auto;
+    min-width: 200px;
+    z-index: 100;
+}
+
+.doll {
+    cursor: grab;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+    -webkit-user-drag: none;
+    position: relative;
+}
+
+.doll {
+    transition: left 0.3s ease-out, top 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.doll.dragging {
+    transition: none !important;
+}
+
+.doll:active {
+    cursor: grabbing;
+}
+
+.doll.dragging {
+    opacity: 0.7;
+    transform: scale(1.05);
+    z-index: 1000;
+}
+
+.doll-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.doll-top,
+.doll-bottom {
+    width: 100%;
+    height: auto;
+    display: block;
+    pointer-events: none;
+}
+
+.doll-top {
+    transition: transform 0.3s ease, margin-bottom 0.3s ease;
+    z-index: 2;
+}
+
+.doll-bottom {
+    z-index: 1;
+}
+
+
+.doll.dragging {
+    opacity: 0.9;
+    transform: scale(1.05);
+    z-index: 1000;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+    transition: transform 0.1s ease;
+    cursor: grabbing;
+}
+
+.doll .doll-top {
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out, margin-bottom 0.3s ease;
+}
+
+.doll.open-completely .doll-top {
+    transform: translateY(-100px) !important;
+    opacity: 0 !important;
+}
+
+.doll.open-completely .doll-bottom {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+}
+
+@media (max-width: 1024px) {
+    .game-area {
+        flex-direction: column;
+    }
+
+    .assembly-area {
+        width: 100%;
+        height: 250px;
+    }
+
+    .mother-container {
+        min-height: 200px;
+    }
+
+    .flying-dolls {
+        gap: 0.8rem;
+    }
+
+    .play-area {
+        height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .game-header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0.8rem;
+    }
+
+    .game-info {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .value {
+        font-size: var(--font-size-md);
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        min-width: 100px;
+        padding: 0.6rem 1.2rem;
+        font-size: var(--font-size-sm);
+    }
+
+    .game-area {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .assembly-area {
+        height: 220px;
+    }
+
+    .play-area {
+        height: 350px;
+    }
+
+    .flying-dolls {
+        gap: 0.6rem;
+        height: 350px;
+    }
+
+    .mother-container {
+        min-height: 180px;
+    }
+
+    .doll[data-is-mother="true"] {
+        width: 200px !important;
+        min-width: 200px;
+    }
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATRESHKA - Авторизация</title>
+    <link rel="stylesheet" href="style/styles.css">
+    <link rel="stylesheet" href="style/auth.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Экран авторизации -->
+        <div id="auth-screen" class="screen active">
+            <div class="auth-container card">
+                <h1>MATRESHKA</h1>
+
+                <div id="login-form" class="form active">
+                    <h2>Вход в игру</h2>
+                    <div class="input-group">
+                        <label for="login-username">Логин</label>
+                        <input type="text" id="login-username" placeholder="Введите ваш логин" required
+                            autocomplete="username">
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Пароль</label>
+                        <input type="password" id="login-password" placeholder="Введите ваш пароль" required
+                            autocomplete="current-password">
+                    </div>
+                    <button id="login-btn" class="btn-primary">
+                        <span>Войти в игру</span>
+                    </button>
+                    <p class="switch-form mt-3">
+                        Нет аккаунта? <a href="#" id="switch-to-register">Создайте его</a>
+                    </p>
+                </div>
+
+                <div id="register-form" class="form">
+                    <h2>Регистрация</h2>
+                    <div class="input-group">
+                        <label for="register-username">Логин</label>
+                        <input type="text" id="register-username" placeholder="Придумайте логин (от 3 символов)"
+                            required autocomplete="username">
+                    </div>
+                    <div class="input-group">
+                        <label for="register-password">Пароль</label>
+                        <input type="password" id="register-password" placeholder="Придумайте пароль (от 4 символов)"
+                            required autocomplete="new-password">
+                    </div>
+                    <div class="input-group">
+                        <label for="register-confirm">Подтверждение</label>
+                        <input type="password" id="register-confirm" placeholder="Повторите пароль" required
+                            autocomplete="new-password">
+                    </div>
+                    <button id="register-btn" class="btn-primary">
+                        <span>Создать аккаунт</span>
+                    </button>
+                    <p class="switch-form mt-3">
+                        Уже есть аккаунт? <a href="#" id="switch-to-login">Войти</a>
+                    </p>
+                </div>
+
+                <div id="auth-message" class="message"></div>
+            </div>
+        </div>
+        
+        <!-- Загрузочный экран с прыгающей матрешкой -->
+        <div id="loading-screen" class="screen">
+            <div class="loading-container">
+                <div class="matreshka-loader">
+                    <div class="matreshka-whole">
+                        <div class="matreshka-part matreshka-bottom">
+                            <img id="loading-doll-bottom" src="svg-dolls/red-down.svg" alt="Нижняя часть матрешки">
+                        </div>
+                        <div class="matreshka-part matreshka-top">
+                            <img id="loading-doll-top" src="svg-dolls/red-up.svg" alt="Верхняя часть матрешки">
+                        </div>
+                    </div>
+                </div>
+                <h1>MATRESHKA</h1>
+                <p class="loading-text">Загружаем игру...</p>
+                <div class="loading-progress">
+                    <div class="progress-bar-bg">
+                        <div id="progress-bar" class="progress-bar-fill"></div>
+                    </div>
+                    <div id="loading-percentage" class="loading-percentage">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/dollColors.js"></script>
+    <script src="scripts/dataManager.js"></script>
+    <script src="scripts/auth.js"></script>
+</body>
+
+</html>

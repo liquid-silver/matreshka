@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATRESHKA - Главное меню</title>
+    <link rel="stylesheet" href="../style/styles.css">
+    <link rel="stylesheet" href="../style/modal.css">
+    <link rel="stylesheet" href="../style/menu.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div id="menu-screen">
+        <header class="menu-header">
+            <div class="user-info">
+                <div class="avatar-container">
+                    <img id="user-avatar" src="" alt="Аватар" class="avatar">
+                </div>
+                <div>
+                    <span id="username" class="username"></span>
+                </div>
+            </div>
+
+            <div class="settings">
+                <div class="setting-group" style="visibility: hidden;">
+                    <label for="volume-slider">Громкость:</label>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
+                </div>
+
+                <div class="setting-group">
+                    <label for="difficulty-select">Сложность:</label>
+                    <select id="difficulty-select">
+                        <option value="easy">Легкий</option>
+                        <option value="medium" selected>Средний</option>
+                        <option value="hard">Сложный</option>
+                    </select>
+                </div>
+
+                <button id="reset-progress" class="btn-danger">Сбросить прогресс</button>
+                <button id="logout-btn" class="btn-secondary">Выйти</button>
+            </div>
+        </header>
+
+        <main class="menu-main">
+            <h1 class="game-title">MATRESHKA</h1>
+
+            <div class="levels-container">
+                <div class="levels-grid" id="levels-grid"></div>
+            </div>
+
+            <div class="menu-hint mt-4">
+                <p class="text-center"
+                    style="color: var(--color-text-secondary); font-style: italic; font-size: 1.1rem;">
+                    Выберите уровень для начала игры
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="../scripts/dollColors.js"></script>
+    <script src="../scripts/dataManager.js"></script>
+    <script src="../scripts/modal.js"></script>
+    <script src="../scripts/menu.js"></script>
+    <script src="../scripts/previews.js"></script>
+</body>
+
+</html>

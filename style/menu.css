@@ -1,0 +1,668 @@
+@import url("./styles.css");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg,
+            rgba(220, 53, 69, 0.05) 0%,
+            rgba(108, 117, 125, 0.05) 100%),
+        var(--color-bg-primary);
+    min-height: 100vh;
+    color: var(--color-text-primary);
+    font-size: 1.1rem;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--color-bg-primary);
+    box-shadow: var(--shadow-md);
+    border-bottom: 1px solid var(--color-border);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    min-width: 200px;
+}
+
+.avatar-container {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid var(--color-primary);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--color-bg-secondary);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 0;
+}
+
+.avatar-container:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-primary);
+}
+
+.avatar {
+    width: 90%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.username {
+    font-family: Kelly Slab, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--color-primary);
+    letter-spacing: 0.5px;
+}
+
+.settings {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.setting-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.setting-group label {
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+#volume-slider {
+    width: 100px;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--color-border);
+    border-radius: 3px;
+    outline: none;
+}
+
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: var(--shadow-sm);
+}
+
+#volume-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: var(--shadow-sm);
+}
+
+#difficulty-select {
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    background: white;
+    color: var(--color-text-primary);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s ease;
+    min-width: 140px;
+}
+
+#difficulty-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.menu-main {
+    padding: var(--spacing-xl);
+    text-align: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.game-title {
+    font-size: 3.5rem;
+    color: var(--color-primary);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: var(--spacing-xl);
+    font-family: 'Kelly Slab', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    position: relative;
+    padding-bottom: var(--spacing-md);
+}
+
+.game-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 40%;
+    right: 40%;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+}
+
+.levels-container {
+    margin-top: var(--spacing-xl);
+}
+
+.levels-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.level-card {
+    background: white;
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 320px;
+}
+
+.level-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: var(--gradient-primary);
+}
+
+.level-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg), 0 8px 25px rgba(220, 53, 69, 0.2);
+    border-color: var(--color-primary);
+}
+
+.level-number {
+    font-family: 'Kelly Slab', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: 1px;
+}
+
+.level-name {
+    font-size: 1.3rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-primary);
+    font-weight: 600;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+}
+
+.level-description {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+    margin: var(--spacing-md) 0;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.level-score {
+    font-size: 1.2rem;
+    color: var(--color-primary);
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+}
+
+.play-button {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-md);
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: auto;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.play-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
+}
+
+.play-button:active {
+    transform: translateY(0);
+}
+
+#avatar-modal,
+#reset-modal {
+    z-index: 1000;
+}
+
+.avatars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--color-border);
+}
+
+.avatar-option {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 3px solid var(--color-border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 0;
+}
+
+.avatar-option:hover {
+    transform: scale(1.1);
+    border-color: var(--color-primary);
+}
+
+.avatar-option.selected {
+    border-color: var(--color-primary);
+    border-width: 4px;
+    box-shadow: var(--shadow-primary);
+}
+
+.avatar-option img {
+    width: 90%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    margin-top: var(--spacing-lg);
+}
+
+.menu-header button {
+    padding: 10px 20px;
+    font-size: 1rem;
+}
+
+/* Стили для превью уровней */
+.level-preview {
+    width: 100%;
+    height: 180px;
+    position: relative;
+    margin: var(--spacing-md) 0;
+    border-radius: var(--border-radius-md);
+    background: var(--color-bg-secondary);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--color-border);
+    transition: border-color 0.3s ease;
+}
+
+.level-card:hover .level-preview {
+    border-color: var(--color-primary);
+}
+
+/* Контейнер для анимации превью */
+.preview-canvas {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    pointer-events: none; /* Чтобы не мешало кликам на карточку */
+}
+
+/* Стили для матрёшек в превью */
+.preview-doll {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center center;
+    transition: transform 0.3s ease;
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+/* Стили для контуров */
+.doll-outline {
+    opacity: 0.6;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Индикатор загрузки */
+.preview-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    gap: var(--spacing-sm);
+}
+
+.preview-loading-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--color-border);
+    border-top: 3px solid var(--color-primary);
+    border-radius: 50%;
+    animation: preview-spin 1s linear infinite;
+}
+
+@keyframes preview-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 1200px) {
+    .levels-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 1rem;
+    }
+
+    .menu-header {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-lg);
+    }
+
+    .user-info {
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .settings {
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+    }
+
+    .setting-group {
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    #volume-slider {
+        width: 150px;
+    }
+
+    .game-title {
+        font-size: 2.5rem;
+    }
+
+    .levels-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+    }
+
+    .modal-buttons button {
+        width: 100%;
+    }
+
+    .level-card {
+        min-height: 300px;
+    }
+
+    .level-preview {
+        height: 150px;
+    }
+}
+
+
+/* Стили для превью уровней */
+.level-preview {
+    width: 100%;
+    height: 180px;
+    position: relative;
+    margin: var(--spacing-md) 0;
+    border-radius: var(--border-radius-md);
+    background: var(--color-bg-secondary);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--color-border);
+    transition: border-color 0.3s ease;
+}
+
+.level-card:hover .level-preview {
+    border-color: var(--color-primary);
+}
+
+/* Контейнер для анимации превью */
+.preview-canvas {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    pointer-events: none; /* Чтобы не мешало кликам на карточку */
+}
+
+/* Стили для матрёшек в превью */
+.preview-doll {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center center;
+    transition: transform 0.3s ease;
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+/* Стили для контуров */
+.doll-outline {
+    opacity: 0.6;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Индикатор загрузки */
+.preview-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    gap: var(--spacing-sm);
+}
+
+.preview-loading-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--color-border);
+    border-top: 3px solid var(--color-primary);
+    border-radius: 50%;
+    animation: preview-spin 1s linear infinite;
+}
+
+@keyframes preview-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Плавная анимация для превью */
+.level-preview {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Для адаптивности */
+@media (max-width: 768px) {
+    .level-preview {
+        height: 150px;
+    }
+    
+    .preview-doll {
+        max-width: 70%;
+        max-height: 70%;
+    }
+}
+
+/* Добавить в конец файла menu.css */
+.doll-preview-container {
+    transition: all 0.3s ease;
+}
+
+.doll-top-preview {
+    transition: transform 0.5s ease;
+}
+
+.doll-letter-preview {
+    pointer-events: none;
+}
+
+/* Для адаптивности превью уровня 3 */
+@media (max-width: 768px) {
+    .doll-letter-preview {
+        font-size: 20px !important;
+    }
+    
+    .doll-preview-container {
+        width: 22% !important;
+        left: 15% !important;
+        margin-left: 3% !important;
+    }
+}
+
+/* В menu.css добавить */
+.doll-top-preview {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    object-position: center bottom !important;
+}
+
+.doll-bottom-preview {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    object-position: center top !important;
+}
+
+/* Или альтернативный вариант для половинчатых изображений */
+.doll-top-preview {
+    height: 50% !important;
+    bottom: auto !important;
+    top: 0 !important;
+}
+
+.doll-bottom-preview {
+    height: 50% !important;
+    top: auto !important;
+    bottom: 0 !important;
+}
+
+/* Для лучшего отображения букв в превью уровня 3 */
+.doll-letter-preview {
+    font-size: clamp(20px, 2.5vw, 30px) !important;
+}
+
+@media (max-width: 768px) {
+    .doll-preview-container {
+        width: 22% !important;
+        height: 70% !important;
+        left: 14% !important;
+        margin-left: 4% !important;
+    }
+    
+    .doll-letter-preview {
+        font-size: 18px !important;
+    }
+}
+
+/* Стили для превью уровня 4 */
+.preview-level4-doll {
+    transition: top 0.1s linear, left 0.1s linear;
+    will-change: top, left;
+}
+
+/* Для адаптивности превью уровня 4 */
+@media (max-width: 768px) {
+    .preview-level4-doll {
+        max-width: 25% !important;
+        max-height: 25% !important;
+    }
+}

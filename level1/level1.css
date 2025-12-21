@@ -135,7 +135,7 @@ body {
     background: var(--color-bg-primary);
     overflow: hidden;
     width: 100%;
-    height: calc(100vh - 70px);
+    height: calc(100vh - px);
 }
 
 #playAreaWrap {
@@ -145,8 +145,8 @@ body {
     justify-content: center;
     width: 100%;
     height: 100%;
-    max-width: min(95vmin, 800px);
-    max-height: min(95vmin, 800px);
+    max-width: min(75vmin, 800px);
+    max-height: min(100vmin, 800px);
     margin: 0 auto;
 }
 

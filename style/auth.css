@@ -164,10 +164,10 @@ button:active {
 .switch-form {
     margin-top: var(--spacing-lg);
     color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-md);
 }
 
-.switch-form a {
+.switch-form a { 
     color: var(--color-primary);
     text-decoration: none;
     font-weight: 700;
@@ -401,7 +401,7 @@ button:active {
 }
 
 .loading-percentage {
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-xl);
     color: var(--color-text-primary);
     font-family: 'Cormorant Garamond', serif;
     font-weight: 600;

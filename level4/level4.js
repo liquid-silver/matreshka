@@ -155,11 +155,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const containerRect = flyingDollsContainer.getBoundingClientRect();
 
-            const marginPercent = 0.05; 
+            const marginPercent = 0.005; 
             this.minX = containerRect.width * marginPercent;
             this.maxX = containerRect.width * (1 - marginPercent) - this.size;
             this.minY = containerRect.height * marginPercent;
-            this.maxY = containerRect.height * (1 - marginPercent * 3) - this.size;
+            this.maxY = containerRect.height * (1 - marginPercent * 20) - this.size;
 
             this.position.x = this.minX + Math.random() * (this.maxX - this.minX);
             this.position.y = this.minY + Math.random() * (this.maxY - this.minY);

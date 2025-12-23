@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (window.initPreviews) {
                 window.initPreviews();
             }
-        }, 100);
+        }, 100); 
 
         document.querySelectorAll('.play-button').forEach(button => button.addEventListener('click', (e) => {
             e.stopPropagation(); startLevel(parseInt(button.dataset.level));

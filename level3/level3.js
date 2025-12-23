@@ -16,6 +16,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const rulesBtn = document.getElementById('rules-btn');
     const wordDisplay = document.getElementById('word-display');
     const targetWordElement = document.getElementById('target-word');
+    const difficultyDisplay = document.getElementById('difficulty-display');
+
+    const difficultyNames = {
+        easy: 'Легкий',
+        medium: 'Средний',
+        hard: 'Сложный'
+    };
+
+    // Обновляем отображение сложности
+    if (difficultyDisplay) {
+        difficultyDisplay.textContent = difficultyNames[difficulty];
+    }
 
     const WORDS_BY_DIFFICULTY = {
         easy: {
@@ -384,6 +396,12 @@ document.addEventListener('DOMContentLoaded', function () {
         modalSystem.showGameResults(isVictory, isNewRecord, stats, actions, 'level3');
     }
 
+    function getDifficultyInfoText() {
+        const s = gameState.currentSettings;
+        const names = { easy: 'Легкий', medium: 'Средний', hard: 'Сложный' };
+        return `${names[difficulty]}: слово из ${s.letters.length} букв, ${s.timeLimit} сек`;
+    }
+
     function createRulesContent() {
         const contentDiv = document.createElement('div'); contentDiv.className = 'rules-text';
         const title = document.createElement('h3'); title.textContent = 'Правила игры';
@@ -394,10 +412,13 @@ document.addEventListener('DOMContentLoaded', function () {
             'Откройте матрёшки в правильной последовательности',
             'Если буква правильная - матрёшка остаётся открытой',
             'Если ошиблись - все матрёшки закроются',
-            `Угадайте слово из ${gameState.totalLetters} букв!`
         ];
         rules.forEach(ruleText => { const p = document.createElement('p'); p.textContent = ruleText; p.style.fontSize = 'var(--font-size-md)'; rulesList.appendChild(p); });
-        contentDiv.appendChild(title); contentDiv.appendChild(rulesList);
+        const difficultyDiv = document.createElement('div'); difficultyDiv.className = 'difficulty-info';
+        const diffTitle = document.createElement('h4'); diffTitle.textContent = 'Текущая сложность:';
+        const diffText = document.createElement('p'); diffText.textContent = getDifficultyInfoText();
+        difficultyDiv.appendChild(diffTitle); difficultyDiv.appendChild(diffText);
+        contentDiv.appendChild(title); contentDiv.appendChild(rulesList); contentDiv.appendChild(difficultyDiv);
         return contentDiv;
     }
 

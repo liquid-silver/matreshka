@@ -63,8 +63,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         setTimeout(() => {
-            if (window.PreviewManager) {
-                PreviewManager.init();
+            if (window.PreviewManager && typeof window.PreviewManager.init === 'function') {
+                window.PreviewManager.init();
             } else if (window.initPreviews) {
                 window.initPreviews();
             }
@@ -161,6 +161,13 @@ document.addEventListener('DOMContentLoaded', function () {
     function resetProgress() {
         dataManager.data.scores[currentUser] = {};
         dataManager.save();
+        
+        // Переинициализируем превьюшки
+        if (window.PreviewManager) {
+            window.PreviewManager.isInitialized = false;
+            window.PreviewManager.previews.clear();
+        }
+        
         loadLevels();
         if (typeof modalSystem !== 'undefined' && modalSystem.showMessage) modalSystem.showMessage('Прогресс сброшен', 'Все рекорды успешно удалены!', [{ text: 'Отлично', action: 'close' }]);
         else alert('Прогресс успешно сброшен!');

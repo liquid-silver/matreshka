@@ -16,6 +16,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const timerElement = document.getElementById('timer');
     const pauseBtn = document.getElementById('pause-btn');
     const rulesBtn = document.getElementById('rules-btn');
+    const difficultyDisplay = document.getElementById('difficulty-display');
+
+    const difficultyNames = {
+        easy: 'Легкий',
+        medium: 'Средний',
+        hard: 'Сложный'
+    };
+
+    if (difficultyDisplay) {
+        difficultyDisplay.textContent = difficultyNames[difficulty];
+    }
 
     const difficultySettings = {
         easy: {
@@ -65,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
         currentImage: null
     };
 
-    let imagesCache = {}; // Кэш для всех изображений
+    let imagesCache = {}; 
 
     function initGame() {
         gameState.currentSettings = difficultySettings[difficulty];
@@ -94,7 +105,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         );
 
-        // Предзагрузка всех изображений (цветные матрешки и их контуры)
         preloadImages().then(() => {
             showStartModal();
         });
@@ -108,10 +118,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function preloadImages() {
         return new Promise((resolve) => {
             let loaded = 0;
-            const total = DOLL_COLORS.length * 2; // Каждый цвет: обычная + контур
-
+            const total = DOLL_COLORS.length * 2; 
             DOLL_COLORS.forEach(color => {
-                // Предзагружаем цветную матрешку
                     const colorImg = new Image();
                     colorImg.src = DollManager.getUrl(color);
                 colorImg.onload = colorImg.onerror = () => {
@@ -121,7 +129,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (loaded === total) resolve();
                 };
 
-                // Предзагружаем контур матрешки
                 const outlineImg = new Image();
                 outlineImg.src = DollManager.getOutlineUrl(color);
                 outlineImg.onload = outlineImg.onerror = () => {
@@ -147,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
         gameState.currentScale = lastFixed * 0.4 * gameState.currentSettings.sizeFactor;
 
         const img = new Image();
-        img.src = DollManager.getUrl(gameState.currentColor); // Цветная матрешка
+        img.src = DollManager.getUrl(gameState.currentColor); 
         img.className = 'doll-image';
         img.style.position = 'absolute';
         img.style.left = '50%';
@@ -178,9 +185,8 @@ document.addEventListener('DOMContentLoaded', function () {
         scoreElement.textContent = gameState.score;
         updateDollsCounter();
 
-        // Создаем изображение КОНТУРА (не черной матрешки!)
         const img = new Image();
-        img.src = DollManager.getOutlineUrl(frozenColor); // Контур нужного цвета
+        img.src = DollManager.getOutlineUrl(frozenColor); 
         img.className = 'doll-image doll-outline';
         img.style.position = 'absolute';
         img.style.left = '50%';
@@ -194,7 +200,6 @@ document.addEventListener('DOMContentLoaded', function () {
         img.setAttribute('draggable', 'false');
         img.setAttribute('data-outline-color', frozenColor);
 
-        // Добавляем стили для контуров
         img.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))';
         img.style.opacity = '0.7';
 
@@ -208,7 +213,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         gameState.scaleStack.push(frozenScale);
 
-        // Анимация успеха
         if (gameState.currentImage) {
             gameState.currentImage.classList.add('success-animation');
             setTimeout(() => gameState.currentImage.classList.remove('success-animation'), 300);
@@ -367,9 +371,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const rect = playArea.getBoundingClientRect();
         const maxScale = Math.min(rect.width, rect.height) / 200 * gameState.currentSettings.sizeFactor;
 
-        // Используем черный контур для внешней границы
         const img = new Image();
-        img.src = DollManager.getOutlineUrl('black'); // Черный контур
+        img.src = DollManager.getOutlineUrl('black'); 
         img.className = 'doll-image doll-outline';
         img.style.position = 'absolute';
         img.style.left = '50%';
@@ -474,7 +477,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function getDifficultyInfoText() {
         const s = gameState.currentSettings;
         const names = { easy: 'Легкий', medium: 'Средний', hard: 'Сложный' };
-        return `${names[difficulty]}: ${s.targetDolls} матрёшек, ${s.timeLimit} сек, скорость: ${s.growRate.toFixed(2)}`;
+        return `${names[difficulty]}: ${s.targetDolls} матрёшек, ${s.timeLimit} сек`;
     }
 
     function createRulesContent() {
@@ -532,7 +535,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function onPointerDown(e) {
-        // Игнорируем правую кнопку мыши
         if (e.button === 2) return;
         
         e.preventDefault();
@@ -564,13 +566,11 @@ document.addEventListener('DOMContentLoaded', function () {
         pauseBtn.addEventListener('click', pauseGame);
         rulesBtn.addEventListener('click', showRulesModal);
         
-        // Открытие модального окна с правилами по правой кнопке мыши
         document.addEventListener('contextmenu', (e) => {
             e.preventDefault();
             showRulesModal();
         });
         
-        // Пауза по нажатию ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && gameState.isPlaying) {
                 pauseGame();

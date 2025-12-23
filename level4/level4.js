@@ -14,6 +14,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const timerElement = document.getElementById('timer');
     const pauseBtn = document.getElementById('pause-btn');
     const rulesBtn = document.getElementById('rules-btn');
+    const difficultyDisplay = document.getElementById('difficulty-display');
+
+    const difficultyNames = {
+        easy: 'Легкий',
+        medium: 'Средний',
+        hard: 'Сложный'
+    };
+
+    // Обновляем отображение сложности
+    if (difficultyDisplay) {
+        difficultyDisplay.textContent = difficultyNames[difficulty];
+    }
 
     const DIFFICULTY_SETTINGS = {
         easy: {
@@ -751,6 +763,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function getDifficultyInfoText() {
+        const s = gameState.currentSettings;
+        const names = { easy: 'Легкий', medium: 'Средний', hard: 'Сложный' };
+        return `${names[difficulty]}: ${s.dollCount} матрёшек, ${s.timeLimit} сек`;
+    }
+
     function createRulesContent() {
         const contentDiv = document.createElement('div'); contentDiv.className = 'rules-text';
         const title = document.createElement('h3'); title.textContent = 'Правила игры';
@@ -759,11 +777,14 @@ document.addEventListener('DOMContentLoaded', function () {
             'Перетаскивайте матрёшек из левой области в правую',
             'Цель: Собрать все матрёшки от самой большой к самой маленькой',
             'Можно поместить вправо только ту матрёшку, которая меньше предыдущей',
-            'Чтобы достать матрёшку обратно — перетащите её влево',
-            `Соберите все ${gameState.currentSettings.dollCount} матрёшек за ${gameState.currentSettings.timeLimit} секунд!`
+            'Чтобы достать матрёшку обратно — перетащите её влево'
         ];
         rules.forEach(ruleText => { const p = document.createElement('p'); p.textContent = ruleText; p.style.fontSize = 'var(--font-size-md)'; rulesList.appendChild(p); });
-        contentDiv.appendChild(title); contentDiv.appendChild(rulesList);
+        const difficultyDiv = document.createElement('div'); difficultyDiv.className = 'difficulty-info';
+        const diffTitle = document.createElement('h4'); diffTitle.textContent = 'Текущая сложность:';
+        const diffText = document.createElement('p'); diffText.textContent = getDifficultyInfoText();
+        difficultyDiv.appendChild(diffTitle); difficultyDiv.appendChild(diffText);
+        contentDiv.appendChild(title); contentDiv.appendChild(rulesList); contentDiv.appendChild(difficultyDiv);
         return contentDiv;
     }
 

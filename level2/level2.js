@@ -13,6 +13,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const timerElement = document.getElementById('timer');
     const pauseBtn = document.getElementById('pause-btn');
     const rulesBtn = document.getElementById('rules-btn');
+    const difficultyDisplay = document.getElementById('difficulty-display');
+
+    const difficultyNames = {
+        easy: 'Легкий',
+        medium: 'Средний',
+        hard: 'Сложный'
+    };
+
+    // Обновляем отображение сложности
+    if (difficultyDisplay) {
+        difficultyDisplay.textContent = difficultyNames[difficulty];
+    }
 
     const difficultySettings = {
         easy: {

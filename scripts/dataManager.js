@@ -9,13 +9,24 @@ class DataManager {
         const saved = localStorage.getItem(this.dataKey);
         if (saved) {
             try { this.data = { ...this.defaultData, ...JSON.parse(saved) }; }
-            catch (e) { console.error('Ошибка загрузки данных:', e); this.data = { ...this.defaultData }; }
-        } else this.data = { ...this.defaultData };
+            catch (e) { 
+                console.error('Ошибка загрузки данных:', e); 
+                this.data = { ...this.defaultData }; 
+            }
+        } 
+        else 
+            this.data = { ...this.defaultData };
     }
 
     save() {
-        try { localStorage.setItem(this.dataKey, JSON.stringify(this.data)); return true; }
-        catch (e) { console.error('Ошибка сохранения данных:', e); return false; }
+        try { 
+            localStorage.setItem(this.dataKey, JSON.stringify(this.data)); 
+            return true; 
+        }
+        catch (e) { 
+            console.error('Ошибка сохранения данных:', e); 
+            return false; 
+        }
     }
 
     register(username, password) {

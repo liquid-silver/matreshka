@@ -327,7 +327,6 @@ document.addEventListener('DOMContentLoaded', function () {
         startDrag(e) {
             if (!gameState.isPlaying || gameState.isPaused) return;
             
-            // Игнорируем правую кнопку мыши
             if (e.button === 2) return;
             
             e.preventDefault();
@@ -441,12 +440,10 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
 
             let clientX, clientY;
-
             clientX = e.clientX;
             clientY = e.clientY;
 
             this.removeDragClone();
-
             if (this.isInMother) {
                 this.container.style.opacity = '1';
             } else {
@@ -454,7 +451,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             const targetArea = this.checkDropTarget(clientX, clientY);
-
             if (targetArea === 'play') {
                 this.dropToPlayArea();
             } else if (targetArea === 'assembly') {
@@ -465,7 +461,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             document.removeEventListener('mousemove', this.drag.bind(this));
             document.removeEventListener('mouseup', this.endDrag.bind(this));
-
             gameState.draggedDoll = null;
         }
 

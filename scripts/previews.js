@@ -6,11 +6,9 @@ class PreviewManager {
         this.isInitialized = false;
     }
 
-    // Инициализация всех превью
     init() {
         if (this.isInitialized) return;
 
-        // Ждем немного, чтобы элементы успели отрендериться
         setTimeout(() => {
             this.initPreviews();
             this.setupHoverListeners();
@@ -18,7 +16,6 @@ class PreviewManager {
         }, 100);
     }
 
-    // Инициализация отдельных превью для каждого уровня
     initPreviews() {
         const previewElements = document.querySelectorAll('.level-preview[data-level]');
 
@@ -30,25 +27,18 @@ class PreviewManager {
         previewElements.forEach(previewEl => {
             const levelId = previewEl.dataset.level;
 
-            // Проверяем, не инициализировали ли уже этот превью
             if (this.previews.has(levelId)) {
                 return;
             }
 
-            // Очищаем контейнер (на всякий случай)
             previewEl.innerHTML = '';
-
-            // Создаем контейнер для анимации
             const canvasContainer = document.createElement('div');
             canvasContainer.className = 'preview-canvas';
             previewEl.appendChild(canvasContainer);
 
-            // Загружаем изображения для этого уровня
             this.loadLevelImages(levelId).then(() => {
-                // Создаем статичное превью
                 this.createStaticPreview(levelId, canvasContainer);
 
-                // Сохраняем ссылку на контейнер
                 this.previews.set(levelId, {
                     element: previewEl,
                     canvas: canvasContainer,
@@ -63,19 +53,15 @@ class PreviewManager {
         });
     }
 
-    // Загрузка изображений для уровня
     async loadLevelImages(levelId) {
-        // Для всех уровней нам нужны матрешки и контуры
-        const colors = ['red', 'blue', 'yellow', 'pink']; // Добавили pink для уровня 2
+        const colors = ['red', 'blue', 'yellow', 'pink']; 
         const promises = [];
 
-        // Загружаем цветные матрешки и их контуры
         colors.forEach(color => {
             if (!this.imagesCache[color]) {
                 this.imagesCache[color] = {};
             }
 
-            // Загружаем цветную матрешку
             const imgPromise = new Promise((resolve) => {
                 const img = new Image();
                 img.onload = () => {
@@ -89,7 +75,6 @@ class PreviewManager {
                 img.src = DollManager.getUrl(color);
             });
 
-            // Загружаем контур матрешки (только для уровня 1)
             if (levelId === '1') {
                 const outlinePromise = new Promise((resolve) => {
                     const img = new Image();
@@ -109,7 +94,6 @@ class PreviewManager {
             promises.push(imgPromise);
         });
 
-        // Загружаем черную матрешку (не контур, а обычную)
         if (!this.imagesCache.black) {
             this.imagesCache.black = {};
         }
@@ -129,7 +113,6 @@ class PreviewManager {
 
         promises.push(blackDollPromise);
 
-        // Для уровня 1 также нужен черный контур
         if (levelId === '1') {
             const blackOutlinePromise = new Promise((resolve) => {
                 const img = new Image();
@@ -149,7 +132,6 @@ class PreviewManager {
         return Promise.all(promises);
     }
 
-    // Создание статичного превью (начальное состояние)
     createStaticPreview(levelId, container) {
         container.innerHTML = '';
 
@@ -171,7 +153,6 @@ class PreviewManager {
         }
     }
 
-    // Статичное превью для уровня 1: черный контур с маленькой красной матрешкой
     createLevel1StaticPreview(container) {
         if (!this.imagesCache.black?.outline || !this.imagesCache.red?.full) {
             this.showLoading(container);
@@ -179,7 +160,6 @@ class PreviewManager {
             return;
         }
 
-        // Создаем черный контур
         const blackOutline = new Image();
         blackOutline.src = this.imagesCache.black.outline;
         blackOutline.className = 'preview-doll doll-outline';
@@ -187,7 +167,6 @@ class PreviewManager {
         blackOutline.setAttribute('data-outline-color', 'black');
         blackOutline.style.zIndex = '1';
 
-        // Создаем маленькую красную матрешку
         const redDoll = new Image();
         redDoll.src = this.imagesCache.red.full;
         redDoll.className = 'preview-doll';
@@ -198,15 +177,12 @@ class PreviewManager {
         container.appendChild(redDoll);
     }
 
-    // Настройка обработчиков наведения мыши
     setupHoverListeners() {
-        // Добавляем обработчики ко всем карточкам уровней
         document.querySelectorAll('.level-card').forEach(levelCard => {
             const levelId = levelCard.querySelector('.play-button')?.dataset.level;
 
             if (!levelId) return;
 
-            // Проверяем, не добавлены ли уже обработчики
             if (levelCard.dataset.previewListenersAdded) return;
 
             levelCard.addEventListener('mouseenter', (e) => {
@@ -227,12 +203,10 @@ class PreviewManager {
                 setTimeout(() => this.stopPreviewAnimation(levelId), 1000);
             }, { passive: false });
 
-            // Помечаем, что обработчики добавлены
             levelCard.dataset.previewListenersAdded = 'true';
         });
     }
 
-    // Запуск анимации превью
     startPreviewAnimation(levelId) {
         const preview = this.previews.get(levelId);
         if (!preview || preview.isAnimating) return;
@@ -257,7 +231,6 @@ class PreviewManager {
         }
     }
 
-    // Остановка анимации превью
     stopPreviewAnimation(levelId) {
         const preview = this.previews.get(levelId);
         if (!preview || !preview.isAnimating) return;
@@ -272,6 +245,15 @@ class PreviewManager {
         this.createStaticPreview(levelId, preview.canvas);
     }
 
+    getLevel3Dolls() {
+        return [
+            { color: 'orange', letter: 'G', order: 2, position: 0 },
+            { color: 'turquoise', letter: 'A', order: 4, position: 1 },
+            { color: 'bordo', letter: 'I', order: 1, position: 2 },
+            { color: 'yellow', letter: 'R', order: 3, position: 3 }
+        ];
+    }
+
     createLevel1StaticPreview(container) {
         if (!this.imagesCache.black?.outline || !this.imagesCache.red?.full) {
             this.showLoading(container);
@@ -279,7 +261,6 @@ class PreviewManager {
             return;
         }
 
-        // Создаем черный контур
         const blackOutline = new Image();
         blackOutline.src = this.imagesCache.black.outline;
         blackOutline.className = 'preview-doll doll-outline';
@@ -287,14 +268,12 @@ class PreviewManager {
         blackOutline.setAttribute('data-outline-color', 'black');
         blackOutline.style.zIndex = '1';
 
-        // Создаем маленькую красную матрешку
         const redDoll = new Image();
         redDoll.src = this.imagesCache.red.full;
         redDoll.className = 'preview-doll';
         redDoll.style.transform = 'translate(-50%, -50%) scale(0.2)';
         redDoll.style.zIndex = '2';
 
-        // Создаем синий контур (чуть меньше)
         const blueOutline = new Image();
         blueOutline.src = this.imagesCache.blue?.outline || this.imagesCache.red.outline;
         blueOutline.className = 'preview-doll doll-outline';
@@ -302,7 +281,6 @@ class PreviewManager {
         blueOutline.style.opacity = '0.7';
         blueOutline.style.zIndex = '3';
 
-        // Создаем желтый контур (еще меньше)
         const yellowOutline = new Image();
         yellowOutline.src = this.imagesCache.yellow?.outline || this.imagesCache.red.outline;
         yellowOutline.className = 'preview-doll doll-outline';
@@ -324,17 +302,15 @@ class PreviewManager {
         let isGrowing = true;
         let lastFrameTime = 0;
         let currentDoll = null;
-        const maxScales = [0.95, 0.8, 0.65]; // Разные максимальные размеры для каждой матрешки
-        const startScales = [0.2, 0.15, 0.1]; // Стартовые размеры
-        const growSpeed = 0.6; // Скорость роста
-        const pauseBetweenDolls = 100; // Пауза между матрешками (мс)
+        const maxScales = [0.95, 0.8, 0.65]; 
+        const startScales = [0.2, 0.15, 0.1]; 
+        const growSpeed = 0.6; 
+        const pauseBetweenDolls = 100; 
         let pauseUntil = 0;
-        const outlines = []; // Массив для хранения созданных контуров
+        const outlines = []; 
 
-        // Очищаем контейнер
         container.innerHTML = '';
 
-        // Создаем черный контур (внешний)
         const blackOutline = new Image();
         blackOutline.src = this.imagesCache.black.outline;
         blackOutline.className = 'preview-doll doll-outline';
@@ -345,7 +321,6 @@ class PreviewManager {
         container.appendChild(blackOutline);
         outlines.push(blackOutline);
 
-        // Создаем первую матрешку (красную)
         currentDoll = new Image();
         currentDoll.src = this.imagesCache[colors[currentColorIndex]].full;
         currentDoll.className = 'preview-doll';
@@ -357,27 +332,22 @@ class PreviewManager {
         const animate = (currentTime) => {
             if (!preview.isAnimating) return;
 
-            // Запрашиваем следующий кадр
             preview.animationFrame = requestAnimationFrame(animate);
 
             if (!lastFrameTime) lastFrameTime = currentTime;
             const deltaTime = (currentTime - lastFrameTime) / 1000;
             lastFrameTime = currentTime;
 
-            // Если пауза между матрешками
             if (pauseUntil > currentTime) {
                 return;
             }
 
             if (isGrowing) {
-                // Растим текущую матрешку
                 currentScale += growSpeed * deltaTime;
 
                 if (currentScale >= maxScales[currentColorIndex]) {
-                    // Достигли максимального размера - превращаем в контур
                     isGrowing = false;
 
-                    // Создаем контур из текущей матрешки
                     const outlineDoll = new Image();
                     outlineDoll.src = this.imagesCache[colors[currentColorIndex]].outline;
                     outlineDoll.className = 'preview-doll doll-outline';
@@ -388,25 +358,17 @@ class PreviewManager {
                     container.appendChild(outlineDoll);
                     outlines.push(outlineDoll);
 
-                    // Удаляем растущую матрешку
                     container.removeChild(currentDoll);
-
-                    // Переходим к следующей матрешке
                     currentColorIndex++;
 
                     if (currentColorIndex < colors.length) {
-                        // Создаем следующую матрешку
                         pauseUntil = currentTime + pauseBetweenDolls;
                     } else {
-                        // Все матрешки превращены в контуры
-                        // Ждем и перезапускаем анимацию
-                        pauseUntil = currentTime + 500; // Пауза перед перезапуском
+                        pauseUntil = currentTime + 500;
                     }
                 }
             } else {
-                // Создаем новую матрешку или перезапускаем анимацию
                 if (currentColorIndex < colors.length) {
-                    // Создаем следующую матрешку
                     currentScale = startScales[currentColorIndex];
                     isGrowing = true;
 
@@ -418,22 +380,18 @@ class PreviewManager {
 
                     container.appendChild(currentDoll);
                 } else {
-                    // Перезапускаем анимацию - удаляем все контуры (кроме черного)
                     outlines.forEach((outline, index) => {
-                        if (index > 0) { // Оставляем черный контур (индекс 0)
+                        if (index > 0) { 
                             container.removeChild(outline);
                         }
                     });
 
-                    // Очищаем массив контуров (оставляем только черный)
                     outlines.splice(1);
 
-                    // Сбрасываем параметры
                     currentColorIndex = 0;
                     currentScale = startScales[currentColorIndex];
                     isGrowing = true;
 
-                    // Создаем первую матрешку
                     currentDoll = new Image();
                     currentDoll.src = this.imagesCache[colors[currentColorIndex]].full;
                     currentDoll.className = 'preview-doll';
@@ -444,25 +402,22 @@ class PreviewManager {
                 }
             }
 
-            // Обновляем трансформацию текущей матрешки (если она существует)
             if (currentDoll && currentDoll.parentNode === container) {
                 currentDoll.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
             }
         };
 
-        // Запускаем анимацию
         preview.animationFrame = requestAnimationFrame(animate);
     }
 
     createLevel2StaticPreview(container) {
         container.innerHTML = '';
 
-        // Создаем сетку 2x2 черных матрешек (меньшего размера)
         const positions = [
-            { top: '28%', left: '38%' },  // левая верхняя
-            { top: '28%', left: '62%' },  // правая верхняя
-            { top: '73%', left: '38%' },  // левая нижняя
-            { top: '73%', left: '62%' }   // правая нижняя
+            { top: '28%', left: '38%' }, 
+            { top: '28%', left: '62%' }, 
+            { top: '73%', left: '38%' }, 
+            { top: '73%', left: '62%' }   
         ];
 
         positions.forEach((pos, index) => {
@@ -484,10 +439,8 @@ class PreviewManager {
     animateLevel2Preview(preview) {
         const container = preview.canvas;
 
-        // Очищаем контейнер и создаем начальное состояние
         this.createLevel2StaticPreview(container);
 
-        // Получаем все черные матрешки
         const blackDolls = Array.from(container.querySelectorAll('.preview-doll'));
         const dolls = blackDolls.map((doll, index) => ({
             element: doll,
@@ -502,7 +455,6 @@ class PreviewManager {
         let lastStepTime = Date.now();
         let animationId = null;
 
-        // Функция для открытия матрешки
         const flipCard = (dollIndex, color) => {
             const doll = dolls[dollIndex];
             if (!doll || doll.isMatched) return;
@@ -510,7 +462,6 @@ class PreviewManager {
             doll.isFlipped = true;
             doll.color = color;
 
-            // Создаем цветную версию поверх черной
             const colorDoll = new Image();
             colorDoll.src = this.imagesCache[color]?.full || DollManager.getUrl(color);
             colorDoll.className = 'preview-doll';
@@ -525,7 +476,6 @@ class PreviewManager {
             doll.colorElement = colorDoll;
             container.appendChild(colorDoll);
 
-            // Анимация появления
             setTimeout(() => {
                 colorDoll.style.transition = 'opacity 0.3s ease';
                 colorDoll.style.opacity = '1';
@@ -534,13 +484,11 @@ class PreviewManager {
             return colorDoll;
         };
 
-        // Функция для скрытия матрешки
         const unflipCard = (dollIndex) => {
             const doll = dolls[dollIndex];
             if (!doll || !doll.isFlipped || doll.isMatched) return;
 
             if (doll.colorElement) {
-                // Анимация исчезновения
                 doll.colorElement.style.transition = 'opacity 0.3s ease';
                 doll.colorElement.style.opacity = '0';
 
@@ -555,7 +503,6 @@ class PreviewManager {
             }
         };
 
-        // Функция для совпадения пары
         const matchCards = (dollIndex1, dollIndex2) => {
             const doll1 = dolls[dollIndex1];
             const doll2 = dolls[dollIndex2];
@@ -565,7 +512,6 @@ class PreviewManager {
             doll1.isMatched = true;
             doll2.isMatched = true;
 
-            // Анимация совпадения для цветных матрешек
             if (doll1.colorElement) {
                 doll1.colorElement.style.transition = 'all 0.4s ease';
                 doll1.colorElement.style.opacity = '0';
@@ -578,11 +524,9 @@ class PreviewManager {
                 doll2.colorElement.style.transform = 'translate(-50%, -50%) scale(0)';
             }
 
-            // Также скрываем черные матрешки
             doll1.element.style.opacity = '0';
             doll2.element.style.opacity = '0';
 
-            // Удаляем элементы после анимации
             setTimeout(() => {
                 if (doll1.colorElement && doll1.colorElement.parentNode) {
                     container.removeChild(doll1.colorElement);
@@ -595,7 +539,6 @@ class PreviewManager {
             }, 400);
         };
 
-        // Основная функция анимации с использованием setTimeout для более простого управления временем
         const animateStep = () => {
             if (!preview.isAnimating) {
                 if (animationId) {
@@ -609,72 +552,71 @@ class PreviewManager {
 
             // Управление анимацией по шагам
             switch (animationStep) {
-                case 0: // Начало - открываем правую верхнюю (синюю)
-                    flipCard(1, 'sea'); // индекс 1 = правая верхняя
+                case 0: 
+                    flipCard(1, 'sea');
                     animationStep = 1;
                     lastStepTime = now;
                     animationId = setTimeout(animateStep, 800);
                     break;
 
-                case 1: // Открываем левую верхнюю (розовую)
-                    flipCard(0, 'pink'); // индекс 0 = левая верхняя
+                case 1:
+                    flipCard(0, 'pink'); 
                     animationStep = 2;
                     lastStepTime = now;
                     animationId = setTimeout(animateStep, 800);
                     break;
 
-                case 2: // Скрываем обе матрешки
-                    unflipCard(1); // правая верхняя
-                    unflipCard(0); // левая верхняя
+                case 2: 
+                    unflipCard(1); 
+                    unflipCard(0); 
                     animationStep = 3;
                     lastStepTime = now;
                     animationId = setTimeout(animateStep, 800);
                     break;
 
-                case 3: // Открываем правую верхнюю (синюю) снова
+                case 3: 
                     flipCard(1, 'sea');
                     animationStep = 4;
                     lastStepTime = now;
                     animationId = setTimeout(animateStep, 800);
                     break;
 
-                case 4: // Открываем левую нижнюю (синюю)
-                    flipCard(2, 'sea'); // индекс 2 = левая нижняя
+                case 4: 
+                    flipCard(2, 'sea'); 
                     animationStep = 5;
                     lastStepTime = now;
                     animationId = setTimeout(animateStep, 800);
                     break;
 
-                case 5: // Совпадение синих матрешек
-                    matchCards(1, 2); // правая верхняя и левая нижняя
+                case 5: 
+                    matchCards(1, 2); 
                     animationStep = 6;
                     lastStepTime = now;
                     animationId = setTimeout(animateStep, 800);
                     break;
 
-                case 6: // Открываем левую верхнюю (розовую)
+                case 6: 
                     flipCard(0, 'pink');
                     animationStep = 7;
                     lastStepTime = now;
                     animationId = setTimeout(animateStep, 800);
                     break;
 
-                case 7: // Открываем правую нижнюю (розовую)
-                    flipCard(3, 'pink'); // индекс 3 = правая нижняя
+                case 7:
+                    flipCard(3, 'pink');
                     animationStep = 8;
                     lastStepTime = now;
                     animationId = setTimeout(animateStep, 800);
                     break;
 
-                case 8: // Совпадение розовых матрешек
-                    matchCards(0, 3); // левая верхняя и правая нижняя
+                case 8: 
+                    matchCards(0, 3); 
                     animationStep = 9;
                     lastStepTime = now;
                     animationId = setTimeout(animateStep, 1000);
                     break;
 
-                case 9: // Перезапуск анимации
-                    // Сбрасываем состояние
+                case 9: 
                     dolls.forEach(doll => {
                         doll.isFlipped = false;
                         doll.isMatched = false;
@@ -686,11 +628,9 @@ class PreviewManager {
                         doll.element.style.opacity = '1';
                     });
 
-                    // Удаляем все элементы и создаем заново
                     container.innerHTML = '';
                     this.createLevel2StaticPreview(container);
 
-                    // Обновляем ссылки на элементы
                     const newBlackDolls = Array.from(container.querySelectorAll('.preview-doll'));
                     newBlackDolls.forEach((newDoll, index) => {
                         if (dolls[index]) {
@@ -705,48 +645,15 @@ class PreviewManager {
             }
         };
 
-        // Запускаем анимацию
         animationId = setTimeout(animateStep, 500);
-        preview.animationFrame = animationId; // Сохраняем ID для отмены
+        preview.animationFrame = animationId; 
     }
 
     animateLevel3Preview(preview) {
         const container = preview.canvas;
-
         container.innerHTML = '';
 
-        const dolls = [
-            {
-                color: 'orange',
-                letter: 'G',
-                order: 2,
-                position: 0,
-                openOrder: 2
-            },
-            {
-                color: 'turquoise',
-                letter: 'A',
-                order: 4,
-                position: 1,
-                openOrder: 4
-            },
-            {
-                color: 'bordo',
-                letter: 'I',
-                order: 1,
-                position: 2,
-                openOrder: 1
-            },
-            {
-                color: 'yellow',
-                letter: 'R',
-                order: 3,
-                position: 3,
-                openOrder: 3
-            }
-        ];
-
-        dolls.sort((a, b) => a.position - b.position);
+        const dolls = this.getLevel3Dolls();
 
         const dollElements = dolls.map((doll, index) => {
             const dollItem = document.createElement('div');
@@ -760,9 +667,7 @@ class PreviewManager {
             dollItem.style.zIndex = '1';
             dollItem.setAttribute('data-color', doll.color);
             dollItem.setAttribute('data-letter', doll.letter);
-            dollItem.setAttribute('data-order', doll.order);
 
-            // Нижняя часть матрешки
             const bottomImg = new Image();
             bottomImg.src = DollManager.getAvatarUrl(doll.color, 'down');
             bottomImg.className = 'doll-bottom-preview';
@@ -775,7 +680,6 @@ class PreviewManager {
             bottomImg.style.left = '0';
             bottomImg.style.zIndex = '1';
 
-            // Верхняя часть матрешки (закрытая)
             const topImg = new Image();
             topImg.src = DollManager.getAvatarUrl(doll.color, 'up');
             topImg.className = 'doll-top-preview';
@@ -790,7 +694,6 @@ class PreviewManager {
             topImg.style.transformOrigin = 'bottom center';
             topImg.style.transition = 'transform 0.5s ease';
 
-            // Буква внутри матрешки (изначально скрыта)
             const letterDiv = document.createElement('div');
             letterDiv.className = 'doll-letter-preview';
             letterDiv.textContent = doll.letter;
@@ -815,40 +718,26 @@ class PreviewManager {
             return {
                 element: dollItem,
                 top: topImg,
-                bottom: bottomImg,
                 letter: letterDiv,
-                color: doll.color,
-                letterChar: doll.letter,
                 order: doll.order,
-                position: doll.position,
-                openOrder: doll.openOrder,
                 isOpened: false
             };
         });
 
         let currentStep = 0;
         let animationId = null;
+        const dollsByOrder = [...dollElements].sort((a, b) => a.order - b.order);
 
-        // Сортируем по порядку открытия
-        const dollsByOpenOrder = [...dollElements].sort((a, b) => a.openOrder - b.openOrder);
-
-        // Функция открытия матрешки
         const openDoll = (doll) => {
             if (doll.isOpened) return;
-
             doll.isOpened = true;
-
-            // Анимация открытия верхней части (как в игре)
             doll.top.style.transform = 'translateY(-50%) rotate(-10deg)';
-
-            // Показываем букву
             setTimeout(() => {
                 doll.letter.style.opacity = '1';
                 doll.letter.style.transform = 'translate(-50%, -60%)';
             }, 100);
         };
 
-        // Функция закрытия всех матрешек
         const closeAllDolls = () => {
             dollElements.forEach(doll => {
                 doll.isOpened = false;
@@ -858,59 +747,23 @@ class PreviewManager {
             });
         };
 
-        // Функция анимации
         const animateStep = () => {
             if (!preview.isAnimating) {
-                if (animationId) {
-                    clearTimeout(animationId);
-                }
+                if (animationId) clearTimeout(animationId);
                 return;
             }
 
-            switch (currentStep) {
-                case 0: // Начало - все матрешки закрыты
-                    closeAllDolls();
-                    currentStep = 1;
-                    animationId = setTimeout(animateStep, 500);
-                    break;
-
-                case 1: // Открываем первую матрешку (бордовую, буква I)
-                    openDoll(dollsByOpenOrder[0]); // bordo (I) - первый открывается
-                    currentStep = 2;
-                    animationId = setTimeout(animateStep, 500);
-                    break;
-
-                case 2: // Открываем вторую матрешку (оранжевую, буква G)
-                    openDoll(dollsByOpenOrder[1]); // orange (G) - второй открывается
-                    currentStep = 3;
-                    animationId = setTimeout(animateStep, 500);
-                    break;
-
-                case 3: // Открываем третью матрешку (желтую, буква R)
-                    openDoll(dollsByOpenOrder[2]); // yellow (R) - третий открывается
-                    currentStep = 4;
-                    animationId = setTimeout(animateStep, 500);
-                    break;
-
-                case 4: // Открываем четвертую матрешку (бирюзовую, буква A)
-                    openDoll(dollsByOpenOrder[3]); // turquoise (A) - четвертый открывается
-                    currentStep = 5;
-                    animationId = setTimeout(animateStep, 500);
-                    break;
-
-                case 5: // Все матрешки открыты, ждем и перезапускаем
-                    currentStep = 6;
-                    animationId = setTimeout(animateStep, 500);
-                    break;
-
-                case 6: // Перезапускаем анимацию
-                    currentStep = 0;
-                    animationId = setTimeout(animateStep, 1000);
-                    break;
+            if (currentStep < dollsByOrder.length) {
+                openDoll(dollsByOrder[currentStep]);
+                currentStep++;
+                animationId = setTimeout(animateStep, 500);
+            } else {
+                currentStep = 0;
+                closeAllDolls();
+                animationId = setTimeout(animateStep, 1000);
             }
         };
 
-        // Запускаем анимацию
         animationId = setTimeout(animateStep, 500);
         preview.animationFrame = animationId;
     }
@@ -918,13 +771,7 @@ class PreviewManager {
     createLevel3StaticPreview(container) {
         container.innerHTML = '';
 
-        // Четыре цветных матрешки в ряд: orange, turquoise, bordo, yellow
-        const dolls = [
-            { color: 'orange', letter: 'G', order: 2 },
-            { color: 'turquoise', letter: 'A', order: 4 },
-            { color: 'bordo', letter: 'I', order: 1 },
-            { color: 'yellow', letter: 'R', order: 3 }
-        ];
+        const dolls = this.getLevel3Dolls();
 
         dolls.forEach((doll, index) => {
             const dollItem = document.createElement('div');
@@ -933,11 +780,10 @@ class PreviewManager {
             dollItem.style.width = '20%';
             dollItem.style.height = '80%';
             dollItem.style.bottom = '-45%';
-            dollItem.style.left = `${15 + index * 23}%`; // Равномерное распределение
+            dollItem.style.left = `${15 + index * 23}%`;
             dollItem.style.transform = 'translate(-50%, -50%)';
             dollItem.style.zIndex = '1';
 
-            // Нижняя часть матрешки
             const bottomImg = new Image();
             bottomImg.src = DollManager.getAvatarUrl(doll.color, 'down');
             bottomImg.className = 'doll-bottom-preview';
@@ -950,7 +796,6 @@ class PreviewManager {
             bottomImg.style.left = '0';
             bottomImg.style.zIndex = '1';
 
-            // Верхняя часть матрешки (закрытая)
             const topImg = new Image();
             topImg.src = DollManager.getAvatarUrl(doll.color, 'up');
             topImg.className = 'doll-top-preview';
@@ -973,32 +818,25 @@ class PreviewManager {
     animateLevel4Preview(preview) {
         const container = preview.canvas;
 
-        // Очищаем и создаем начальное состояние
         this.createLevel4StaticPreview(container);
 
-        // Получаем все матрешки уровня 4
         const dollElements = Array.from(container.querySelectorAll('.preview-level4-doll'));
 
         if (dollElements.length === 0) return;
 
-        // Инициализируем данные для анимации
         const dolls = dollElements.map((element, index) => {
             const rect = element.getBoundingClientRect();
             const containerRect = container.getBoundingClientRect();
 
-            // Преобразуем текущие проценты в пиксели
             const currentTop = parseFloat(element.style.top);
             const currentLeft = parseFloat(element.style.left);
 
-            // Начальная позиция в пикселях относительно контейнера
             const top = (currentTop / 100) * containerRect.height;
             const left = (currentLeft / 100) * containerRect.width;
 
-            // Размер элемента
             const size = parseFloat(element.style.width) / 100 * containerRect.width;
 
-            // Случайное направление движения (в пикселях за кадр)
-            const speed = 1.8; // Одинаковая скорость для всех
+            const speed = 1.8; 
             const angle = Math.random() * Math.PI * 2;
             const vx = Math.cos(angle) * speed;
             const vy = Math.sin(angle) * speed;
@@ -1019,7 +857,6 @@ class PreviewManager {
         let animationId = null;
         let lastTime = 0;
 
-        // Функция обновления анимации
         const animate = (currentTime) => {
             if (!preview.isAnimating) {
                 if (animationId) {
@@ -1032,59 +869,44 @@ class PreviewManager {
             const deltaTime = Math.min(currentTime - lastTime, 16); // Макс 60 FPS
             lastTime = currentTime;
 
-            // Получаем размеры контейнера
             const containerRect = container.getBoundingClientRect();
             const containerWidth = containerRect.width;
             const containerHeight = containerRect.height;
 
-            // Обновляем позиции всех матрешек
             dolls.forEach(doll => {
-                // Обновляем позицию
-                doll.x += doll.vx * (deltaTime / 16); // Нормализуем к 60 FPS
+                doll.x += doll.vx * (deltaTime / 16); 
                 doll.y += doll.vy * (deltaTime / 16);
 
-                // Проверка столкновения со стенками
                 const halfWidth = doll.width * 0.5;
                 const halfHeight = doll.height * 0.85;
 
-                // Левая стенка
                 if (doll.x - halfWidth <= 0) {
                     doll.x = halfWidth;
-                    doll.vx = Math.abs(doll.vx); // Отражение
+                    doll.vx = Math.abs(doll.vx); 
                 }
-
-                // Правая стенка
                 if (doll.x + halfWidth >= containerWidth) {
                     doll.x = containerWidth - halfWidth;
-                    doll.vx = -Math.abs(doll.vx); // Отражение
+                    doll.vx = -Math.abs(doll.vx); 
                 }
-
-                // Верхняя стенка
                 if (doll.y - halfHeight <= 0) {
                     doll.y = halfHeight;
-                    doll.vy = Math.abs(doll.vy); // Отражение
+                    doll.vy = Math.abs(doll.vy); 
                 }
-
-                // Нижняя стенка
                 if (doll.y + halfHeight >= containerHeight) {
                     doll.y = containerHeight - halfHeight;
-                    doll.vy = -Math.abs(doll.vy); // Отражение
+                    doll.vy = -Math.abs(doll.vy); 
                 }
 
-                // Преобразуем обратно в проценты для стилей
                 const topPercent = (doll.y / containerHeight) * 100;
                 const leftPercent = (doll.x / containerWidth) * 100;
 
-                // Обновляем стиль элемента
                 doll.element.style.top = `${topPercent}%`;
                 doll.element.style.left = `${leftPercent}%`;
             });
 
-            // Запрашиваем следующий кадр
             animationId = requestAnimationFrame(animate);
         };
 
-        // Запускаем анимацию
         animationId = requestAnimationFrame(animate);
         preview.animationFrame = animationId;
     }
@@ -1092,7 +914,6 @@ class PreviewManager {
     createLevel4StaticPreview(container) {
         container.innerHTML = '';
 
-        // 4 цветные матрешки разных размеров
         const dolls = [
             { color: 'red', size: 30, position: { x: 20, y: 60 } },
             { color: 'yellow', size: 25, position: { x: 80, y: 35 } },
@@ -1129,7 +950,6 @@ class PreviewManager {
         `;
     }
 
-    // Показ загрузки
     showLoading(container) {
         container.innerHTML = `
             <div class="preview-loading">
@@ -1139,7 +959,6 @@ class PreviewManager {
         `;
     }
 
-    // Показать ошибку
     showError(container) {
         container.innerHTML = `
             <div style="color: var(--color-danger); font-size: 12px; text-align: center; padding: 20px;">
@@ -1149,19 +968,15 @@ class PreviewManager {
     }
 }
 
-// Создаем глобальный экземпляр менеджера превью
 window.PreviewManager = new PreviewManager();
 
-// Функция для ручной инициализации (вызывается из menu.js)
 window.initPreviews = function () {
     if (window.PreviewManager) {
         window.PreviewManager.init();
     }
 };
 
-// Автоматическая инициализация при полной загрузке страницы
 window.addEventListener('load', () => {
-    // Ждем немного дольше для полной загрузки
     setTimeout(() => {
         if (window.PreviewManager && !window.PreviewManager.isInitialized) {
             window.PreviewManager.init();

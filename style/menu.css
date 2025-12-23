@@ -341,7 +341,6 @@ body {
     font-size: 1rem;
 }
 
-/* Стили для превью уровней */
 .level-preview {
     width: 100%;
     height: 180px;
@@ -361,15 +360,13 @@ body {
     border-color: var(--color-primary);
 }
 
-/* Контейнер для анимации превью */
 .preview-canvas {
     width: 100%;
     height: 100%;
     position: relative;
-    pointer-events: none; /* Чтобы не мешало кликам на карточку */
+    pointer-events: none;
 }
 
-/* Стили для матрёшек в превью */
 .preview-doll {
     position: absolute;
     top: 50%;
@@ -382,13 +379,11 @@ body {
     pointer-events: none;
 }
 
-/* Стили для контуров */
 .doll-outline {
     opacity: 0.6;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-/* Индикатор загрузки */
 .preview-loading {
     position: absolute;
     top: 50%;
@@ -410,6 +405,37 @@ body {
     border-top: 3px solid var(--color-primary);
     border-radius: 50%;
     animation: preview-spin 1s linear infinite;
+}
+
+.doll-preview-container {
+    transition: all 0.3s ease;
+}
+
+.doll-top-preview {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    object-position: center bottom !important;
+    transition: transform 0.5s ease;
+    height: 50% !important;
+    bottom: auto !important;
+    top: 0 !important;
+}
+
+.doll-bottom-preview {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    object-position: center top !important;
+    height: 50% !important;
+    top: auto !important;
+    bottom: 0 !important;
+}
+
+.doll-letter-preview {
+    pointer-events: none;
+    font-size: clamp(20px, 2.5vw, 30px) !important;
+}
+
+.preview-level4-doll {
+    transition: top 0.1s linear, left 0.1s linear;
+    will-change: top, left;
 }
 
 @keyframes preview-spin {
@@ -485,183 +511,27 @@ body {
     .level-preview {
         height: 150px;
     }
-}
 
-
-/* Стили для превью уровней */
-.level-preview {
-    width: 100%;
-    height: 180px;
-    position: relative;
-    margin: var(--spacing-md) 0;
-    border-radius: var(--border-radius-md);
-    background: var(--color-bg-secondary);
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed var(--color-border);
-    transition: border-color 0.3s ease;
-}
-
-.level-card:hover .level-preview {
-    border-color: var(--color-primary);
-}
-
-/* Контейнер для анимации превью */
-.preview-canvas {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    pointer-events: none; /* Чтобы не мешало кликам на карточку */
-}
-
-/* Стили для матрёшек в превью */
-.preview-doll {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-origin: center center;
-    transition: transform 0.3s ease;
-    max-width: 80%;
-    max-height: 80%;
-    object-fit: contain;
-    pointer-events: none;
-}
-
-/* Стили для контуров */
-.doll-outline {
-    opacity: 0.6;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-}
-
-/* Индикатор загрузки */
-.preview-loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    gap: var(--spacing-sm);
-}
-
-.preview-loading-spinner {
-    width: 30px;
-    height: 30px;
-    border: 3px solid var(--color-border);
-    border-top: 3px solid var(--color-primary);
-    border-radius: 50%;
-    animation: preview-spin 1s linear infinite;
-}
-
-@keyframes preview-spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-/* Плавная анимация для превью */
-.level-preview {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Для адаптивности */
-@media (max-width: 768px) {
-    .level-preview {
-        height: 150px;
-    }
-    
     .preview-doll {
         max-width: 70%;
         max-height: 70%;
     }
-}
 
-/* Добавить в конец файла menu.css */
-.doll-preview-container {
-    transition: all 0.3s ease;
-}
-
-.doll-top-preview {
-    transition: transform 0.5s ease;
-}
-
-.doll-letter-preview {
-    pointer-events: none;
-}
-
-/* Для адаптивности превью уровня 3 */
-@media (max-width: 768px) {
     .doll-letter-preview {
         font-size: 20px !important;
     }
-    
-    .doll-preview-container {
-        width: 22% !important;
-        left: 15% !important;
-        margin-left: 3% !important;
-    }
-}
 
-/* В menu.css добавить */
-.doll-top-preview {
-    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-    object-position: center bottom !important;
-}
-
-.doll-bottom-preview {
-    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-    object-position: center top !important;
-}
-
-/* Или альтернативный вариант для половинчатых изображений */
-.doll-top-preview {
-    height: 50% !important;
-    bottom: auto !important;
-    top: 0 !important;
-}
-
-.doll-bottom-preview {
-    height: 50% !important;
-    top: auto !important;
-    bottom: 0 !important;
-}
-
-/* Для лучшего отображения букв в превью уровня 3 */
-.doll-letter-preview {
-    font-size: clamp(20px, 2.5vw, 30px) !important;
-}
-
-@media (max-width: 768px) {
     .doll-preview-container {
         width: 22% !important;
         height: 70% !important;
         left: 14% !important;
         margin-left: 4% !important;
     }
-    
+
     .doll-letter-preview {
         font-size: 18px !important;
     }
-}
 
-/* Стили для превью уровня 4 */
-.preview-level4-doll {
-    transition: top 0.1s linear, left 0.1s linear;
-    will-change: top, left;
-}
-
-/* Для адаптивности превью уровня 4 */
-@media (max-width: 768px) {
     .preview-level4-doll {
         max-width: 25% !important;
         max-height: 25% !important;
